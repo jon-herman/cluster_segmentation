@@ -35,7 +35,7 @@ public:
     explicit segmentation(ros::NodeHandle nh) : m_nh(nh)  {
 
         // define the subscriber and publisher
-        m_sub = m_nh.subscribe ("/obj_recognition/point_cloud", 1, &segmentation::cloud_cb, this);
+        m_sub = m_nh.subscribe ("/camera/depth/points", 1, &segmentation::cloud_cb, this);
         m_clusterPub = m_nh.advertise<obj_recognition::SegmentedClustersArray> ("/obj_recognition/pcl_clusters",1);
         pcl_pub_ = m_nh.advertise<sensor_msgs::PointCloud2>("/obj_recognition/segmented_clusters", 1);
 
@@ -94,7 +94,7 @@ void segmentation::cloud_cb (const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     pcl::PassThrough<pcl::PointXYZRGB> pass;
     pass.setInputCloud (xyzCloudPtr);
     pass.setFilterFieldName ("z");
-    pass.setFilterLimits (.5, 1.1);
+    pass.setFilterLimits (.5, 5.1);
     //pass.setFilterLimitsNegative (true);
     pass.filter (*xyzCloudPtrFiltered);
 
